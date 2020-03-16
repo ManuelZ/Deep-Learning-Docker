@@ -101,5 +101,5 @@ RUN cd ~/opencv && \
           
 RUN cd ~/opencv/build && \
     make -j4 && \
-    make install &&
+    make install && \
     ldconfig
