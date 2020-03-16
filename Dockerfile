@@ -46,8 +46,7 @@ RUN cd ~ && \
     mkdir build && \
     cd build && \
     cmake .. -DDLIB_USE_CUDA=1 -DUSE_AVX_INSTRUCTIONS=1 -DCMAKE_PREFIX_PATH=/usr/lib/x86_64-linux-gnu && \
-    cmake --build . && \
-    cd .. && \
+    cmake --build -j$(nproc) . 
 
 RUN cd ~/dlib && \
     python setup.py install USE_AVX_INSTRUCTIONS DLIB_USE_CUDA
