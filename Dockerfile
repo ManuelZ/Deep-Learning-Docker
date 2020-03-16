@@ -8,8 +8,6 @@ FROM tensorflow/tensorflow:2.0.1-gpu-py3
 RUN apt-get update && apt-get upgrade -y
 
 RUN apt-get install -y \
-    gcc-5 \
-    g++-5 \
     build-essential \
     cmake \
     unzip \
@@ -30,18 +28,27 @@ RUN apt-get install -y \
     graphicsmagick \
     libgraphicsmagick1-dev \
     libgtk2.0-dev \
+    libopenblas-dev \
+    liblapack-dev \
     liblapack-dev \
     software-properties-common \
     libcudnn7-dev \
     && apt-get clean && rm -rf /tmp/* /var/tmp/*
 
-RUN  update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 50 --slave /usr/bin/g++ g++ /usr/bin/g++-5 && \
-     update-alternatives --config gcc
+RUN ls /usr/local/cuda-10.0/lib64
+RUN ln -s /usr/local/cuda-10.0/lib64/libcublas.so.10.0 /usr/local/cuda-10.0/lib64/libcublas.so
+RUN ln -s /usr/local/cuda-10.0/lib64/libcurand.so.10.0 /usr/local/cuda-10.0/lib64/libcurand.so
+RUN ln -s /usr/local/cuda-10.0/lib64/libcusolver.so.10.0 /usr/local/cuda-10.0/lib64/libcusolver.so
 
-RUN dpkg-query -L libcudnn7 libcudnn7-dev
+RUN cd /usr/local/cuda-10.0 && \
+    for i in `ls`;do ln -s `pwd`/$i  /usr/local/include/;done
+
+RUN apt-get install libcublas-dev cuda-cusolver-dev-10-0 cuda-curand-dev-10-0 -y
+
+RUN dpkg -l |grep cuda
 
 RUN cd ~ && \
-    git clone -b "v19.9" --single-branch https://github.com/davisking/dlib.git && \
+    git clone -b "v19.19" --single-branch https://github.com/davisking/dlib.git && \
     cd dlib && \
     mkdir build && \
     cd build && \
