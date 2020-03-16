@@ -32,17 +32,20 @@ RUN apt-get install -y \
     libgtk2.0-dev \
     liblapack-dev \
     software-properties-common \
+    libcudnn7-dev \
     && apt-get clean && rm -rf /tmp/* /var/tmp/*
 
 RUN  update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 50 --slave /usr/bin/g++ g++ /usr/bin/g++-5 && \
      update-alternatives --config gcc
+
+RUN dpkg-query -L libcudnn7 libcudnn7-dev
 
 RUN cd ~ && \
     git clone -b "v19.9" --single-branch https://github.com/davisking/dlib.git && \
     cd dlib && \
     mkdir build && \
     cd build && \
-    cmake .. -DDLIB_USE_CUDA=1 -DUSE_AVX_INSTRUCTIONS=1 -DCMAKE_PREFIX_PATH=/usr/include/x86_64-linux-gnu && \
+    cmake .. -DDLIB_USE_CUDA=1 -DUSE_AVX_INSTRUCTIONS=1 -DCMAKE_PREFIX_PATH=/usr/lib/x86_64-linux-gnu && \
     cmake --build . && \
     cd .. && \
     python setup.py install --yes USE_AVX_INSTRUCTIONS --yes DLIB_USE_CUDA
