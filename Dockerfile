@@ -1,8 +1,3 @@
-# Modified from:
-# https://hub.docker.com/r/webforgelabs/dlib/dockerfile
-# and 
-# https://www.pyimagesearch.com/2018/06/18/face-recognition-with-opencv-python-and-deep-learning/
-
 FROM tensorflow/tensorflow:2.0.1-gpu-py3
 
 RUN apt-get update && apt-get upgrade -y
