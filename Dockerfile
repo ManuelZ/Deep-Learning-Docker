@@ -5,7 +5,9 @@
 
 FROM tensorflow/tensorflow:2.0.1-gpu-py3
 
-RUN apt-get update && apt-get upgrade -y && apt-get install -y \
+RUN apt-get update && apt-get upgrade -y
+
+RUN apt-get install -y \
     build-essential \
     cmake \
     unzip \
