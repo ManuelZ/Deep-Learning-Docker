@@ -1,8 +1,9 @@
 FROM tensorflow/tensorflow:2.0.1-gpu-py3
 
 RUN apt-get update && apt-get upgrade -y
-
-# Common utilities
+#
+# Install Common utilities
+#
 RUN apt-get install -y \
     build-essential \
     cmake \
@@ -12,9 +13,11 @@ RUN apt-get install -y \
     curl
     #software-properties-common \
 
-# OpenCV dependencies 
+#
+# Install OpenCV dependencies 
+#
 # From https://www.pyimagesearch.com/2020/02/03/how-to-use-opencvs-dnn-module-with-nvidia-gpus-cuda-and-cudnn/
-RUN apt-get install \
+RUN apt-get install -y \
     libjpeg-dev \
     libpng-dev \
     libtiff-dev \
@@ -36,8 +39,9 @@ RUN apt-get install \
 #    libopenblas-dev \
 #    liblapack-dev \
     
-
-# Dlib dependencies on cuda packages
+#
+# Install Dlib dependencies on cuda packages
+#
 RUN apt-get install -y \ 
     libcudnn7-dev \
     libcublas-dev \
