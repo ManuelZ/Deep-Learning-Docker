@@ -8,21 +8,26 @@ FROM tensorflow/tensorflow:2.0.1-gpu-py3
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
     build-essential \
     cmake \
+    unzip \
+    pkg-config \
+    libjpeg-dev \
+    libpng-dev \
+    libtiff-dev \
+    libavcodec-dev \
+    libavformat-dev \
+    libswscale-dev \
+    libv4l-dev \
+    libxvidcore-dev \
+    libx264-dev \
+    libatlas-base-dev \
     gfortran \
     git \
     curl \
     graphicsmagick \
     libgraphicsmagick1-dev \
-    libatlas-dev \
-    libavcodec-dev \
-    libavformat-dev \
     libgtk2.0-dev \
-    libjpeg-dev \
     liblapack-dev \
-    libswscale-dev \
-    pkg-config \
     software-properties-common \
-    zip \
     && apt-get clean && rm -rf /tmp/* /var/tmp/*
 
 RUN cd ~ && \
@@ -35,6 +40,4 @@ RUN cd ~ && \
     cd .. && \
     python setup.py install --yes USE_AVX_INSTRUCTIONS --yes DLIB_USE_CUDA
 
-RUN pip3 install face_recognition
-
-RUN pip3 install imutils
+RUN pip3 install face_recognition imutils
