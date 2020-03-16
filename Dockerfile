@@ -35,17 +35,14 @@ RUN apt-get install -y \
     libcudnn7-dev \
     && apt-get clean && rm -rf /tmp/* /var/tmp/*
 
-RUN ls /usr/local/cuda-10.0/lib64
 RUN ln -s /usr/local/cuda-10.0/lib64/libcublas.so.10.0 /usr/local/cuda-10.0/lib64/libcublas.so
 RUN ln -s /usr/local/cuda-10.0/lib64/libcurand.so.10.0 /usr/local/cuda-10.0/lib64/libcurand.so
 RUN ln -s /usr/local/cuda-10.0/lib64/libcusolver.so.10.0 /usr/local/cuda-10.0/lib64/libcusolver.so
 
-RUN cd /usr/local/cuda-10.0 && \
-    for i in `ls`;do ln -s `pwd`/$i  /usr/local/include/;done
-
-RUN apt-get install libcublas-dev cuda-cusolver-dev-10-0 cuda-curand-dev-10-0 -y
-
-RUN dpkg -l |grep cuda
+RUN apt-get install -y \ 
+    libcublas-dev \
+    cuda-cusolver-dev-10-0 \
+    cuda-curand-dev-10-0
 
 RUN cd ~ && \
     git clone -b "v19.19" --single-branch https://github.com/davisking/dlib.git && \
