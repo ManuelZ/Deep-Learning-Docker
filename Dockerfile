@@ -30,19 +30,20 @@ RUN apt-get install -y \
     libgtk2.0-dev \
     libopenblas-dev \
     liblapack-dev \
-    liblapack-dev \
     software-properties-common \
+    && apt-get clean && rm -rf /tmp/* /var/tmp/*
+
+# Dlib dependencies on cuda packages
+RUN apt-get install -y \ 
     libcudnn7-dev \
+    libcublas-dev \
+    cuda-cusolver-dev-10-0 \
+    cuda-curand-dev-10-0 \
     && apt-get clean && rm -rf /tmp/* /var/tmp/*
 
 RUN ln -s /usr/local/cuda-10.0/lib64/libcublas.so.10.0 /usr/local/cuda-10.0/lib64/libcublas.so
 RUN ln -s /usr/local/cuda-10.0/lib64/libcurand.so.10.0 /usr/local/cuda-10.0/lib64/libcurand.so
 RUN ln -s /usr/local/cuda-10.0/lib64/libcusolver.so.10.0 /usr/local/cuda-10.0/lib64/libcusolver.so
-
-RUN apt-get install -y \ 
-    libcublas-dev \
-    cuda-cusolver-dev-10-0 \
-    cuda-curand-dev-10-0
 
 RUN cd ~ && \
     git clone -b "v19.19" --single-branch https://github.com/davisking/dlib.git && \
