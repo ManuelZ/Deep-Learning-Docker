@@ -2,61 +2,19 @@ FROM tensorflow/tensorflow:2.0.1-gpu-py3
 
 RUN apt-get update && apt-get upgrade -y
 
+# Common utilities
 RUN apt-get install -y \
     build-essential \
     cmake \
     unzip \
     pkg-config \
-    libjpeg-dev \
-    libpng-dev \
-    libtiff-dev \
-    libavcodec-dev \
-    libavformat-dev \
-    libswscale-dev \
-    libv4l-dev \
-    libxvidcore-dev \
-    libx264-dev \
-    libatlas-base-dev \
-    gfortran \
     git \
-    curl \
-    graphicsmagick \
-    libgraphicsmagick1-dev \
-    libgtk2.0-dev \
-    libopenblas-dev \
-    liblapack-dev \
-    software-properties-common \
-    && apt-get clean && rm -rf /tmp/* /var/tmp/*
+    curl
+    #software-properties-common \
 
-# Dlib dependencies on cuda packages
-RUN apt-get install -y \ 
-    libcudnn7-dev \
-    libcublas-dev \
-    cuda-cusolver-dev-10-0 \
-    cuda-curand-dev-10-0 \
-    && apt-get clean && rm -rf /tmp/* /var/tmp/*
-
-RUN ln -s /usr/local/cuda-10.0/lib64/libcublas.so.10.0 /usr/local/cuda-10.0/lib64/libcublas.so
-
-RUN cd ~ && \
-    git clone -b "v19.19" --single-branch https://github.com/davisking/dlib.git && \
-    cd dlib && \
-    mkdir build && \
-    cd build && \
-    cmake .. -DDLIB_USE_CUDA=1 -DUSE_AVX_INSTRUCTIONS=1 -DCMAKE_PREFIX_PATH=/usr/lib/x86_64-linux-gnu && \
-    cmake --build . 
-
-RUN cd ~/dlib && \
-    python setup.py install
-
-RUN pip3 install face_recognition imutils
-
+# OpenCV dependencies 
 # From https://www.pyimagesearch.com/2020/02/03/how-to-use-opencvs-dnn-module-with-nvidia-gpus-cuda-and-cudnn/
 RUN apt-get install \
-    build-essential \
-    cmake \
-    unzip \
-    pkg-config \
     libjpeg-dev \
     libpng-dev \
     libtiff-dev \
@@ -71,6 +29,42 @@ RUN apt-get install \
     gfortran \
     python3-dev
 
+#RUN apt-get install -y \
+#    graphicsmagick \
+#    libgraphicsmagick1-dev \
+#    libgtk2.0-dev \
+#    libopenblas-dev \
+#    liblapack-dev \
+    
+
+# Dlib dependencies on cuda packages
+RUN apt-get install -y \ 
+    libcudnn7-dev \
+    libcublas-dev \
+    cuda-cusolver-dev-10-0 \
+    cuda-curand-dev-10-0 
+
+RUN ln -s /usr/local/cuda-10.0/lib64/libcublas.so.10.0 /usr/local/cuda-10.0/lib64/libcublas.so
+
+
+#
+# DLIB INSTALLATION
+#
+RUN cd ~ && \
+    git clone -b "v19.19" --single-branch https://github.com/davisking/dlib.git && \
+    cd dlib && \
+    mkdir build && \
+    cd build && \
+    cmake .. -DDLIB_USE_CUDA=1 -DUSE_AVX_INSTRUCTIONS=1 -DCMAKE_PREFIX_PATH=/usr/lib/x86_64-linux-gnu && \
+    cmake --build . 
+
+RUN cd ~/dlib && \
+    python setup.py install
+
+
+#
+# OPENCV INSTALLATION
+#
 RUN cd ~ && \
     wget -O opencv.zip https://github.com/opencv/opencv/archive/4.2.0.zip  && \
     wget -O opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/4.2.0.zip && \
@@ -103,3 +97,7 @@ RUN cd ~/opencv/build && \
     make -j4 && \
     make install && \
     ldconfig
+
+RUN pip3 install face_recognition imutils
+
+RUN apt-get clean && rm -rf /tmp/* /var/tmp/*
