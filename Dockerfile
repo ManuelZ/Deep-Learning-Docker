@@ -34,8 +34,8 @@ RUN apt-get install -y \
     software-properties-common \
     && apt-get clean && rm -rf /tmp/* /var/tmp/*
 
-RUN  sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 50 --slave /usr/bin/g++ g++ /usr/bin/g++-5 && \
-     sudo update-alternatives --config gcc
+RUN  update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 50 --slave /usr/bin/g++ g++ /usr/bin/g++-5 && \
+     update-alternatives --config gcc
 
 RUN cd ~ && \
     git clone -b "v19.9" --single-branch https://github.com/davisking/dlib.git && \
