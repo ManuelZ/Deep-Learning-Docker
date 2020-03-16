@@ -90,7 +90,7 @@ RUN cd ~/opencv && \
           -D WITH_CUBLAS=1 \
           -D OPENCV_EXTRA_MODULES_PATH=~/opencv_contrib/modules \
           -D HAVE_opencv_python3=ON \
-          -D PYTHON_EXECUTABLE=~/.virtualenvs/opencv_cuda/bin/python \
+          -D PYTHON_EXECUTABLE=$(which python3) \
           -D BUILD_EXAMPLES=ON .. && \
           
 RUN cd ~/opencv/build && \
