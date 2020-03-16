@@ -52,7 +52,8 @@ RUN cd ~/dlib && \
 RUN pip3 install face_recognition imutils
 
 # From https://www.pyimagesearch.com/2020/02/03/how-to-use-opencvs-dnn-module-with-nvidia-gpus-cuda-and-cudnn/
-RUN apt-get install \
+RUN apt-get install -y \
+    wget \
     build-essential \
     cmake \
     unzip \
@@ -96,7 +97,7 @@ RUN cd ~/opencv && \
           -D WITH_CUBLAS=1 \
           -D OPENCV_EXTRA_MODULES_PATH=~/opencv_contrib/modules \
           -D HAVE_opencv_python3=ON \
-          -D PYTHON_EXECUTABLE=~/.virtualenvs/opencv_cuda/bin/python \
+          -D PYTHON_EXECUTABLE=$(which python3) \
           -D BUILD_EXAMPLES=ON .. && \
           
 RUN cd ~/opencv/build && \
