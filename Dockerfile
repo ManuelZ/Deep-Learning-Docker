@@ -56,7 +56,7 @@ RUN apt-get install \
     build-essential \
     cmake \
     unzip \
-    pkg-config
+    pkg-config \
     libjpeg-dev \
     libpng-dev \
     libtiff-dev \
