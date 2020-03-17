@@ -74,6 +74,11 @@ RUN cd ~ && \
     mv opencv-4.2.0 opencv && \
     mv opencv_contrib-4.2.0 opencv_contrib
 
+# OpenCV dependency
+RUN apt-get install -y \
+    libnppc9.1 
+    
+
 # Make sure to change the value of CUDA_ARCH_BIN with the value 
 # corresponding to your card found on https://developer.nvidia.com/cuda-gpus
 RUN cd ~/opencv && \
