@@ -10,7 +10,8 @@ RUN apt-get install -y \
     unzip \
     pkg-config \
     git \
-    curl
+    curl \
+    wget
     #software-properties-common \
 
 #
