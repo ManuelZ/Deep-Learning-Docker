@@ -30,14 +30,14 @@ RUN apt-get install -y \
     libgtk-3-dev \
     libatlas-base-dev \
     gfortran \
+    libopenblas-dev \
+    liblapack-dev \
     python3-dev
 
 #RUN apt-get install -y \
 #    graphicsmagick \
 #    libgraphicsmagick1-dev \
 #    libgtk2.0-dev \
-#    libopenblas-dev \
-#    liblapack-dev \
     
 #
 # Install Dlib dependencies on cuda packages
