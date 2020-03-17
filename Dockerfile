@@ -34,7 +34,8 @@ RUN apt-get install -y \
     libopenblas-dev \
     liblapack-dev \
     python3-dev \
-    cuda-cufft-dev-10-0
+    cuda-cufft-dev-10-0 \
+    cuda-npp-dev-10-0
     
 #
 # Install Dlib dependencies on cuda packages
@@ -74,10 +75,6 @@ RUN cd ~ && \
     mv opencv-4.2.0 opencv && \
     mv opencv_contrib-4.2.0 opencv_contrib
 
-# OpenCV dependency
-RUN apt-get install -y \
-    cuda-npp-dev-10-0
-    
 
 # Make sure to change the value of CUDA_ARCH_BIN with the value 
 # corresponding to your card found on https://developer.nvidia.com/cuda-gpus
