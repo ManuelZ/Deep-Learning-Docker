@@ -76,7 +76,7 @@ RUN cd ~ && \
 
 # OpenCV dependency
 RUN apt-get install -y \
-    libnppc9.1 
+    cuda-npp-dev-10-0
     
 
 # Make sure to change the value of CUDA_ARCH_BIN with the value 
