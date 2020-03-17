@@ -95,7 +95,7 @@ RUN cd ~/opencv && \
           -D OPENCV_EXTRA_MODULES_PATH=~/opencv_contrib/modules \
           -D HAVE_opencv_python3=ON \
           -D PYTHON_EXECUTABLE=$(which python3) \
-          -D BUILD_EXAMPLES=ON .. && \
+          -D BUILD_EXAMPLES=ON ..
           
 RUN cd ~/opencv/build && \
     make -j4 && \
