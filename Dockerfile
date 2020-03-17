@@ -1,6 +1,7 @@
 FROM tensorflow/tensorflow:2.0.1-gpu-py3
 
 RUN apt-get update && apt-get upgrade -y
+
 #
 # Install Common utilities
 #
@@ -12,7 +13,6 @@ RUN apt-get install -y \
     git \
     curl \
     wget
-    #software-properties-common \
 
 #
 # Install OpenCV dependencies 
@@ -34,11 +34,6 @@ RUN apt-get install -y \
     libopenblas-dev \
     liblapack-dev \
     python3-dev
-
-#RUN apt-get install -y \
-#    graphicsmagick \
-#    libgraphicsmagick1-dev \
-#    libgtk2.0-dev \
     
 #
 # Install Dlib dependencies on cuda packages
