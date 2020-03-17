@@ -33,7 +33,8 @@ RUN apt-get install -y \
     gfortran \
     libopenblas-dev \
     liblapack-dev \
-    python3-dev
+    python3-dev \
+    cuda-cufft-dev-10-0
     
 #
 # Install Dlib dependencies on cuda packages
