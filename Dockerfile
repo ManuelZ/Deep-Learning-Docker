@@ -1,25 +1,26 @@
-FROM tensorflow/tensorflow:2.3.1-gpu
-
 # Notes
 #
-# - In the host machine there are only 2 dependencies: the GPU driver and 
-#   nvidia-docker
+# In the host machine there are few dependencies: 
+#   - Docker 
+#   - The GPU driver
+#   - nvidia-docker
 #   https://www.tensorflow.org/install/docker#tensorflow_docker_requirements
 #
+#
 # - The tensorflow image already comes with the Nvidia package repositories
-#    added: https://www.tensorflow.org/install/gpu#ubuntu_1804_cuda_101
+#   added: https://www.tensorflow.org/install/gpu#ubuntu_1804_cuda_101
 #
 # - The documentation explicitely mentions the tested build configurations
 #   that work for each version of Tensorflow. Specifically I'm referring to the
 #   Cuda version. For Tensorflow 2.3, Cuda 10.1 and cuDNN 7.6 are specified.
-#   So take care when installing development packages below.
 #   https://www.tensorflow.org/install/source#tested_build_configurations
+#
+
+FROM tensorflow/tensorflow:2.3.1-gpu
 
 RUN apt-get update
 
-#
-# Install Common utilities
-#
+# Install build utilities
 RUN apt-get install -y \
     build-essential \
     cmake \
@@ -29,9 +30,7 @@ RUN apt-get install -y \
     curl \
     wget
 
-#
 # Install OpenCV dependencies 
-#
 # From https://www.pyimagesearch.com/2020/02/03/how-to-use-opencvs-dnn-module-with-nvidia-gpus-cuda-and-cudnn/
 RUN apt-get install --no-install-recommends -y \
     libjpeg-dev \
@@ -48,31 +47,30 @@ RUN apt-get install --no-install-recommends -y \
     gfortran \
     python3-dev
 
-# Note:
-# The following is a conjeture of mine.
-# Some packages like libcudnn and libcublas depend on an specific Cuda version, in my case
-# I'm using Cuda 10.1, so I should install the right specific packages.
+
+# To compile OpenCV and DLib some cuda-related development packages are 
+# needed.
 #
-# The cuDNN version recommended for Tensorflow2.3 is libcudnn 7.6
-# libcudnn7 is already installed but I also need libcudnn7-dev
-# The latest libcudnn7 version found in https://developer.nvidia.com/rdp/cudnn-archive 
-# is libcudnn 7.6.5
-# The command `apt-cache madison libcudnn7-dev` lists the specific versions that are available
-# I have selected the latest libcudnn 7.6.5 version available  and I am hardcoding it here below
+# - The cuDNN version recommended for Tensorflow2.3 is libcudnn 7.6
+# - This Tensorflow2.3 image uses cuda 10.1, libcublas-dev has versions 10.1 
+#   and 10.2 . Only the specific version 10.1 allows the OpenCV compilation to
+#   continue. The command `apt-cache madison libcublas-dev` lists the specific 
+#   available package versions.
 RUN apt-get install -y \
-#    libcudnn7=7.6.5.32-1+cuda10.1 \
      libcudnn7-dev \
-#    libcudnn7-dev=7.6.5.32-1+cuda10.1 \
-    libcublas-dev=10.1.0.105-1 \
-#    libcublas10 is in version 10.2, do i need to pass it to version 10.1?
+     libcublas-dev=10.1.0.105-1 \ 
      cuda-cufft-dev-10-1 \
      cuda-npp-dev-10-1 \
      cuda-cusolver-dev-10-1 \
      cuda-curand-dev-10-1
 
-#
-# OPENCV INSTALLATION
-#
+# The following dependencies may be worth it for OpenCV... or not... idk
+# RUN apt-get install -y \ 
+#     libopenblas-dev \
+#     liblapack-dev \
+#     liblapacke-dev
+
+# Download OpenCV
 RUN cd ~ && \
     wget -O opencv.zip https://github.com/opencv/opencv/archive/4.5.0.zip  && \
     wget -O opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/4.5.0.zip && \
@@ -103,29 +101,20 @@ RUN cd ~/opencv && \
           -D PYTHON_EXECUTABLE=$(which python3) \
           -D BUILD_EXAMPLES=ON ..
 
+# Compile OpenCV
 RUN cd ~/opencv/build && \
     make -j4 && \
     make install && \
     ldconfig
-    
+
+# Download DLib
 RUN cd ~ && \
     git clone -b "v19.21" --single-branch https://github.com/davisking/dlib.git
 
+# Compile DLib
 RUN cd ~/dlib && \
     python setup.py install
 
-#RUN apt-get install -y \ 
-#    libopenblas-dev \
-#    liblapack-dev \
-#    libcublas-dev \
-#    cuda-cusolver-dev-10-0 \
-#    cuda-curand-dev-10-0 \
-#    cuda-cufft-dev-10-0 \
-#    cuda-npp-dev-10-0 \
-#    liblapacke-dev
-#RUN ln -s /usr/local/cuda-10.0/lib64/libcublas.so.10.0 /usr/local/cuda-10.0/lib64/libcublas.so
+RUN pip3 install face_recognition imutils
 
-
-# RUN pip3 install face_recognition imutils
-
-# RUN apt-get clean && rm -rf /tmp/* /var/tmp/*
+RUN apt-get clean && rm -rf /tmp/* /var/tmp/*
