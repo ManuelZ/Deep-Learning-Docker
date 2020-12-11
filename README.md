@@ -13,7 +13,7 @@ sudo docker create \
  --env DISPLAY=$DISPLAY \
  --volume $XAUTHORITY:/root/.Xauthority \
  --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
- --volume ~/dlib/examples/:/container/dir IMAGE_NAME
+ --volume ~/dlib/examples/:/container/dir \
  --name dl-container \
  dl
 ```
