@@ -107,19 +107,21 @@ RUN python -m pip install wheel
 # Compile OpenCV
 RUN cd ~/opencv/build && make -j4
 
-RUN python -m pip install --upgrade pip
+RUN python -m pip install --upgrade pip setuptools
 
 # Install OpenCV
-RUN pip wheel ~/opencv/modules/python/package
-RUN pip install opencv-4.5.0-py3-none-any.whl
+WORKDIR /root/opencv/modules/python/package
+RUN sed -i "s/package_name = 'opencv'/package_name = 'opencv_python'/g" setup.py
+RUN python -m pip wheel /root/opencv/modules/python/package
+RUN python -m pip install opencv_python-4.5.0-py3-none-any.whl
 
 # From https://github.com/opencv/opencv/issues/14064
 RUN cd ~/opencv/build && cmake --build . --target opencv_python3
 ENV PYTHONPATH $PYTHONPATH:/root/opencv/build/python_loader
 
+WORKDIR /root
 # Download DLib
-RUN cd ~ && \
-    git clone -b "v19.21" --single-branch https://github.com/davisking/dlib.git
+RUN git clone -b "v19.21" --single-branch https://github.com/davisking/dlib.git
 
 # Compile DLib
 RUN cd ~/dlib && python setup.py install
@@ -127,5 +129,7 @@ RUN cd ~/dlib && python setup.py install
 RUN python -m pip install face_recognition imutils
 
 RUN apt-get install -y vim
+
+RUN python -m pip install pandas scikit-learn
 
 RUN apt-get clean && rm -rf /tmp/* /var/tmp/*
