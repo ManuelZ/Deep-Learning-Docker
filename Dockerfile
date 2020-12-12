@@ -57,7 +57,7 @@ RUN apt-get install --no-install-recommends -y \
 #   continue. The command `apt-cache madison libcublas-dev` lists the specific 
 #   available package versions.
 RUN apt-get install -y \
-     libcudnn7-dev \
+     libcudnn7-dev=7.6.5.32-1+cuda10.1 \
      libcublas-dev=10.1.0.105-1 \ 
      cuda-cufft-dev-10-1 \
      cuda-npp-dev-10-1 \
