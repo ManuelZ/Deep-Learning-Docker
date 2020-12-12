@@ -101,20 +101,31 @@ RUN cd ~/opencv && \
           -D PYTHON_EXECUTABLE=$(which python3) \
           -D BUILD_EXAMPLES=ON ..
 
+
+RUN python -m pip install wheel
+
 # Compile OpenCV
-RUN cd ~/opencv/build && \
-    make -j4 && \
-    make install && \
-    ldconfig
+RUN cd ~/opencv/build && make -j4
+
+RUN python -m pip install --upgrade pip
+
+# Install OpenCV
+RUN pip wheel ~/opencv/modules/python/package
+RUN pip install opencv-4.5.0-py3-none-any.whl
+
+# From https://github.com/opencv/opencv/issues/14064
+RUN cd ~/opencv/build && cmake --build . --target opencv_python3
+ENV PYTHONPATH $PYTHONPATH:/root/opencv/build/python_loader
 
 # Download DLib
 RUN cd ~ && \
     git clone -b "v19.21" --single-branch https://github.com/davisking/dlib.git
 
 # Compile DLib
-RUN cd ~/dlib && \
-    python setup.py install
+RUN cd ~/dlib && python setup.py install
 
-RUN pip3 install face_recognition imutils
+RUN python -m pip install face_recognition imutils
+
+RUN apt-get install -y vim
 
 RUN apt-get clean && rm -rf /tmp/* /var/tmp/*
