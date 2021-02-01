@@ -56,11 +56,11 @@ RUN apt-get install --no-install-recommends -y \
 #   and 10.2 . Only the specific version 10.1 allows the OpenCV compilation to
 #   continue. The command `apt-cache madison libcublas-dev` lists the specific 
 #   available package versions.
-RUN apt-get install -y \
+RUN apt-get install -y --allow-downgrades \
      libcudnn7=7.6.5.32-1+cuda10.1 \
      libcudnn7-dev=7.6.5.32-1+cuda10.1 \
      libcublas-dev=10.1.0.105-1 \ 
-     libcublas=10.1.0.105-1 \ 
+     libcublas10=10.1.0.105-1 \ 
      cuda-cufft-dev-10-1 \
      cuda-npp-dev-10-1 \
      cuda-cusolver-dev-10-1 \
@@ -132,6 +132,6 @@ RUN python -m pip install face_recognition imutils
 
 RUN apt-get install -y vim
 
-RUN python -m pip install pandas scikit-learn
+RUN python -m pip install pandas scikit-learn jupyter
 
 RUN apt-get clean && rm -rf /tmp/* /var/tmp/*
